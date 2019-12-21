@@ -47,4 +47,3 @@ public extension SKPhysicsBody {
     }
 
 }
-

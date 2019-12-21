@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public struct Problem {
     public let question: String
     public let answer: String
