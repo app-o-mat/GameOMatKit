@@ -28,7 +28,12 @@ public class PongPlayer {
     public let problemRotation: CGFloat
     public let position: PlayerPosition
     public var velocity: CGFloat = 1.0
-    public var score = 0
+    public var score = 0 {
+        didSet {
+            scoreNode.text = "\(score)"
+        }
+    }
+    public private(set) var scoreNode = SKLabelNode()
 
     let colors = RandomColors()
     var buttons = [ColorButtonNode]()
@@ -36,6 +41,7 @@ public class PongPlayer {
     public init(problemRotation: CGFloat, position: PlayerPosition) {
         self.problemRotation = problemRotation
         self.position = position
+        self.scoreNode.text = "\(self.score)"
     }
 
     public func addButton(scene: SKScene, xPos: CGFloat, text: String, lineOffset: CGFloat) -> ColorButtonNode {
