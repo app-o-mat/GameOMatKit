@@ -1,5 +1,5 @@
 //
-//  PongScene.swift
+//  GameScene.swift
 //  MathOMat
 //
 //  Created by Louis Franco on 12/21/19.
@@ -9,33 +9,7 @@
 import Foundation
 import GameplayKit
 
-public protocol GameLogicDelegate: class {
-    var gameState: GameState { get }
-
-    func didGameOver()
-    func scene() -> SKScene
-}
-
-public protocol GameLogicPlayers {
-    var players: [PongPlayer] { get }
-
-    func currentPlayerHits()
-    func currentPlayerMisses()
-}
-
-public protocol GameLogic: SKPhysicsContactDelegate {
-    var delegate: GameLogicDelegate? { get set }
-    var generator: ProblemGenerator { get set }
-
-    func reset()
-    func addBoardNodes()
-    func run()
-    func gameOver()
-    func removeAllNodes()
-    func getPlayers() -> GameLogicPlayers?
-}
-
-open class PongScene: SKScene {
+open class GameScene: SKScene {
 
     open var gameLogic: GameLogic {
         didSet {
@@ -284,7 +258,7 @@ open class PongScene: SKScene {
 
 }
 
-extension PongScene: GameLogicDelegate {
+extension GameScene: GameLogicDelegate {
     open func didGameOver() {
         addWaitingToStartButtons()
         self.gameState = .waitingToStart

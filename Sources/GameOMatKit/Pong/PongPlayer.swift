@@ -24,7 +24,7 @@ public enum PlayerPosition {
     }
 }
 
-public class PongPlayer {
+public class PongPlayer: Player {
     public let problemRotation: CGFloat
     public let position: PlayerPosition
     public var velocity: CGFloat = 1.0

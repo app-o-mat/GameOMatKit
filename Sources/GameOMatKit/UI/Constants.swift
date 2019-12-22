@@ -22,8 +22,8 @@ public enum NodeName {
 }
 
 public enum SettingKey {
-    public static let backgroundIndex = "pong.settingKey.backgroundIndex"
-    public static let numberOfPlayers = "pong.settingKey.numberOfPlayers"
+    public static let backgroundIndex = "settingKey.backgroundIndex"
+    public static let numberOfPlayers = "settingKey.numberOfPlayers"
 }
 
 public enum GameState {

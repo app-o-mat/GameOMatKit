@@ -11,14 +11,14 @@ import GameplayKit
 import SpriteKit
 
 public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
-    public let players = [
+    public let players: [Player] = [
         PongPlayer(problemRotation: 0, position: .bottom),
         PongPlayer(problemRotation: .pi, position: .top)]
 
     public override func reset() {
         super.reset()
-        self.players[0].score = 0
-        self.players[1].score = 0
+
+        self.getPongPlayers().forEach { $0.score = 0}
     }
 
     public override func getPlayers() -> GameLogicPlayers? {
@@ -40,7 +40,7 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
     public override func setUpProblem(problemNode: SKSpriteNode, label: SKLabelNode) {
         let problemSize = label.frame.size
 
-        let rotation = self.players[self.currentPlayer].problemRotation
+        let rotation = self.getPongPlayers()[self.currentPlayer].problemRotation
         label.zRotation = rotation
         if rotation == 0.0 {
             label.position = CGPoint(x: 0, y: -problemSize.height / 2.0)
@@ -53,8 +53,8 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         super.addScoreNode(playerIndex: playerIndex, yPosition: yPosition)
         guard let scene = self.scene else { return }
 
-        let score = self.players[playerIndex].scoreNode
-        score.text = "\(self.players[playerIndex].score)"
+        let score = self.getPongPlayers()[playerIndex].scoreNode
+        score.text = "\(self.getPongPlayers()[playerIndex].score)"
         score.fontName = Style.fontName
         score.fontSize *= 2
         score.position = CGPoint(x: score.fontSize + 5, y: yPosition - 50 * CGFloat(playerIndex * 2 - 1))
@@ -80,9 +80,9 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         scene.run(self.loseSoundAction)
 
         let otherPlayer = 1 - currentPlayer
-        self.players[otherPlayer].score += 1
+        self.getPongPlayers()[otherPlayer].score += 1
 
-        guard self.players[otherPlayer].score < 7 else { return gameOver() }
+        guard self.getPongPlayers()[otherPlayer].score < 7 else { return gameOver() }
 
         self.problemNode?.physicsBody = nil
         self.problemNode?.position = initialPosition(scene: scene)

@@ -47,6 +47,11 @@ public class PongGameLogic: NSObject, GameLogic {
         return nil
     }
 
+    public func getPongPlayers() -> [PongPlayer] {
+        guard let players = getPlayers() else { return [] }
+        return players.players.compactMap { $0 as? PongPlayer }
+    }
+
     public func reset() {
     }
 
@@ -206,31 +211,26 @@ public class PongGameLogic: NSObject, GameLogic {
     }
 
     func removeButtons() {
-        getPlayers()?.players.forEach { $0.removeButtons() }
+        getPongPlayers().forEach { $0.removeButtons() }
     }
 
     func createButtons() {
         guard let scene = self.scene else { return }
 
         removeButtons()
-        guard
-            let buttons = getPlayers()?.players[currentPlayer]
-                .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset())
-        else { return }
+        let buttons = getPongPlayers()[currentPlayer]
+            .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset())
 
-        buttons[0].onTap = { [weak self] button in
+        buttons.first?.onTap = { [weak self] button in
             guard self?.delegate?.gameState == .running else { return }
             self?.getPlayers()?.currentPlayerHits()
         }
 
-        buttons[1].onTap = { [weak self] button in
-            guard self?.delegate?.gameState == .running else { return }
-            self?.getPlayers()?.currentPlayerMisses()
-        }
-
-        buttons[2].onTap = { [weak self] button in
-            guard self?.delegate?.gameState == .running else { return }
-            self?.getPlayers()?.currentPlayerMisses()
+        for i in 1..<buttons.count {
+            buttons[i].onTap = { [weak self] button in
+                guard self?.delegate?.gameState == .running else { return }
+                self?.getPlayers()?.currentPlayerMisses()
+            }
         }
     }
 

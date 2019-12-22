@@ -12,9 +12,13 @@ import SpriteKit
 
 public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
 
-    public let players = [PongPlayer(problemRotation: 0, position: .bottom)]
-    var player: PongPlayer {
-        return players[0]
+    var player: PongPlayer
+    public let players: [Player]
+
+    override public init(generator: ProblemGenerator) {
+        self.player = PongPlayer(problemRotation: 0, position: .bottom)
+        self.players = [player]
+        super.init(generator: generator)
     }
 
     override public func reset() {
