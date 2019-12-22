@@ -13,7 +13,7 @@ public enum MathOperator: String, CaseIterable {
     case mult
     case div
 
-    private func generator() -> ProblemGenerator {
+    public func generator() -> ProblemGenerator {
         switch self {
         case .add:
             return AdditionProblems()
@@ -36,10 +36,6 @@ public enum MathOperator: String, CaseIterable {
 
     public func index() -> Int {
         return MathOperator.allCases.firstIndex(of: self) ?? 0
-    }
-
-    public func getNextProblem() -> Problem {
-        return generator().getNextProblem()
     }
 }
 

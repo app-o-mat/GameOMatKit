@@ -25,6 +25,7 @@ public protocol GameLogicPlayers {
 
 public protocol GameLogic: SKPhysicsContactDelegate {
     var delegate: GameLogicDelegate? { get set }
+    var generator: ProblemGenerator { get set }
 
     func reset()
     func addBoardNodes()
