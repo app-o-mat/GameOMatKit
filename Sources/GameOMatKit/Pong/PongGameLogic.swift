@@ -33,7 +33,7 @@ public class PongGameLogic: NSObject, GameLogic {
     let winSoundAction = SKAction.playSoundFileNamed("win", waitForCompletion: false)
     let loseSoundAction = SKAction.playSoundFileNamed("lose", waitForCompletion: false)
 
-    var scene: SKScene? {
+    var scene: GameScene? {
         return self.delegate?.scene()
     }
 
@@ -191,9 +191,8 @@ public class PongGameLogic: NSObject, GameLogic {
         addScoreNode(playerIndex: playerIndex, yPosition: yPosition)
     }
 
-    func createShowButtonsLine(yPosition: CGFloat, playerIndex: Int) {
-        guard let scene = self.scene else { return }
-
+    @discardableResult
+    func createShowButtonsLine(scene: GameScene, yPosition: CGFloat, playerIndex: Int) -> SKNode {
         let path = CGMutablePath()
         path.move(to: CGPoint(x: Style.sideInset, y: yPosition))
         path.addLine(to: CGPoint(x: scene.size.width - Style.sideInset, y: yPosition))
@@ -208,6 +207,7 @@ public class PongGameLogic: NSObject, GameLogic {
         guide.setupAsGuide()
 
         add(node: guide, to: scene)
+        return guide
     }
 
     func removeButtons() {
@@ -229,7 +229,7 @@ public class PongGameLogic: NSObject, GameLogic {
         for i in 1..<buttons.count {
             buttons[i].onTap = { [weak self] button in
                 guard self?.delegate?.gameState == .running else { return }
-                self?.getPlayers()?.currentPlayerMisses()
+                self?.getPlayers()?.currentPlayerTapsWrongButton()
             }
         }
     }

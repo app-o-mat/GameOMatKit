@@ -33,8 +33,8 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         createPlayerNodes(yPosition: scene.size.height - lineOffset(), playerIndex: 1)
 
         let guidePos = scene.size.height / 3.0
-        createShowButtonsLine(yPosition: guidePos, playerIndex: 0)
-        createShowButtonsLine(yPosition: scene.size.height - guidePos, playerIndex: 1)
+        createShowButtonsLine(scene: scene, yPosition: guidePos, playerIndex: 0)
+        createShowButtonsLine(scene: scene, yPosition: scene.size.height - guidePos, playerIndex: 1)
     }
 
     public override func setUpProblem(problemNode: SKSpriteNode, label: SKLabelNode) {
@@ -56,7 +56,7 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         let score = self.getPongPlayers()[playerIndex].scoreNode
         score.text = "\(self.getPongPlayers()[playerIndex].score)"
         score.fontName = Style.fontName
-        score.fontSize *= 2
+        score.fontSize = Style.scoreFontSize
         score.position = CGPoint(x: score.fontSize + 5, y: yPosition - 50 * CGFloat(playerIndex * 2 - 1))
         score.zRotation = .pi / 2.0
         add(node: score, to: scene)
@@ -72,6 +72,10 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         self.problemNode?.physicsBody?.velocity = CGVector(dx: velocity.dx * 1.1, dy: -velocity.dy * 1.1)
 
         self.currentProblem = self.generator.getNextProblem()
+    }
+
+    public func currentPlayerTapsWrongButton() {
+        currentPlayerMisses()
     }
 
     public func currentPlayerMisses() {

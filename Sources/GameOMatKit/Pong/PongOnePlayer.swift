@@ -14,6 +14,8 @@ public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
 
     var player: PongPlayer
     public let players: [Player]
+    var guideLine: SKNode?
+    var guideOffset: CGFloat = 0
 
     override public init(generator: ProblemGenerator) {
         self.player = PongPlayer(problemRotation: 0, position: .bottom)
@@ -24,6 +26,7 @@ public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
     override public func reset() {
         super.reset()
         self.player.score = 0
+        self.guideLine?.run(SKAction.moveTo(y: 0, duration: 0.25))
     }
 
     override public func getPlayers() -> GameLogicPlayers? {
@@ -37,7 +40,7 @@ public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
         createPlayerNodes(yPosition: lineOffset(), playerIndex: 0)
 
         let guidePos = scene.size.height / 2.0
-        createShowButtonsLine(yPosition: guidePos, playerIndex: 0)
+        self.guideLine = createShowButtonsLine(scene: scene, yPosition: guidePos, playerIndex: 0)
     }
 
     override func addScoreNode(playerIndex: Int, yPosition: CGFloat) {
@@ -47,7 +50,7 @@ public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
         let score = self.player.scoreNode
         score.text = "\(self.player.score)"
         score.fontName = Style.fontName
-        score.fontSize *= 2
+        score.fontSize = Style.scoreFontSize
         score.position = CGPoint(x: scene.size.width / 2,
                                  y: scene.size.height - view.safeAreaInsets.top - score.frame.size.height - 10)
         add(node: score, to: scene)
@@ -64,20 +67,45 @@ public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
         return CGVector(dx: dxy * 0.5, dy: -dxy)
     }
 
-    public func currentPlayerHits() {
-        guard let scene = self.scene else { return }
+    override func createButtons() {
+        super.createButtons()
+        self.scene?.hidePauseButton()
+    }
 
-        guard let velocity = self.problemNode?.physicsBody?.velocity else { return }
-        scene.run(self.winSoundAction)
-
+    private func startNextProblem(scene: SKScene) {
         self.problemNode?.physicsBody = nil
         self.problemNode?.position = initialPosition(scene: scene)
-
         self.currentProblem = self.generator.getNextProblem()
+        self.scene?.showPauseButton()
+    }
 
-        self.problemNode?.physicsBody?.velocity = CGVector(dx: velocity.dx * 1.1, dy: velocity.dy * 1.1)
+    public func currentPlayerHits() {
+        guard let scene = self.scene else { return }
+        guard let velocity = self.problemNode?.physicsBody?.velocity else { return }
+
+        scene.run(self.winSoundAction)
+
+        startNextProblem(scene: scene)
+        self.problemNode?.physicsBody?.velocity =
+            CGVector(dx: velocity.dx, dy: velocity.dy * 1.05)
 
         self.player.score += 1
+    }
+
+    public func currentPlayerTapsWrongButton() {
+        guard let scene = self.scene else { return }
+        guard let velocity = self.problemNode?.physicsBody?.velocity else { return }
+
+        scene.run(self.loseSoundAction)
+
+        startNextProblem(scene: scene)
+        self.problemNode?.physicsBody?.velocity =
+            CGVector(dx: velocity.dx * 1.15, dy: velocity.dy * 1.25)
+
+        guideOffset = max(guideOffset - 15, -75)
+        self.guideLine?.run(SKAction.moveTo(y: guideOffset, duration: 0.25))
+
+        self.player.score = max(0, self.player.score - 1)
     }
 
     public func currentPlayerMisses() {

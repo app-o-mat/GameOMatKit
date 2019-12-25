@@ -15,6 +15,7 @@ public protocol GameLogicPlayers {
     var players: [Player] { get }
 
     func currentPlayerHits()
+    func currentPlayerTapsWrongButton()
     func currentPlayerMisses()
 }
 
@@ -22,7 +23,7 @@ public protocol GameLogicDelegate: class {
     var gameState: GameState { get }
 
     func didGameOver()
-    func scene() -> SKScene
+    func scene() -> GameScene
 }
 
 public protocol GameLogic: SKPhysicsContactDelegate {

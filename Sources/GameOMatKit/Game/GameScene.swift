@@ -228,6 +228,14 @@ open class GameScene: SKScene {
         }
     }
 
+    func hidePauseButton() {
+        self.pauseButton?.isHidden = true
+    }
+
+    func showPauseButton() {
+        self.pauseButton?.isHidden = false
+    }
+
     open func onPauseTapped() {
         pauseGame()
         removeControlButtons()
@@ -264,7 +272,7 @@ extension GameScene: GameLogicDelegate {
         self.gameState = .waitingToStart
     }
 
-    open func scene() -> SKScene {
+    open func scene() -> GameScene {
         return self
     }
 }
