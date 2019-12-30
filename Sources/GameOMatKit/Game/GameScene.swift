@@ -25,6 +25,8 @@ open class GameScene: SKScene {
 
     var playerButtons = [ColorButtonNode]()
 
+    var numPausesLeft = 3
+
     var backgroundIndex = 0 {
         didSet {
             UserDefaults.standard.set(backgroundIndex, forKey: SettingKey.backgroundIndex)
@@ -215,6 +217,8 @@ open class GameScene: SKScene {
     func addPauseButton() {
         removeControlButtons()
 
+        guard numPausesLeft > 0 else { return }
+
         let button = ColorButtonNode(
             color: AppColor.imageButtonBackground,
             size: CGSize(width: 128, height: 128))
@@ -233,10 +237,12 @@ open class GameScene: SKScene {
     }
 
     func showPauseButton() {
+        guard numPausesLeft > 0 else { return }
         self.pauseButton?.isHidden = false
     }
 
     open func onPauseTapped() {
+        numPausesLeft -= 1
         pauseGame()
         removeControlButtons()
         addStartButton()
@@ -244,6 +250,7 @@ open class GameScene: SKScene {
     }
 
     open func createRunningGameBoard() {
+        self.numPausesLeft = 3
         gameLogic.reset()
         gameLogic.run()
         self.gameState = .running
