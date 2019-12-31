@@ -132,14 +132,19 @@ open class GameScene: SKScene {
     func addStartButton() {
         let button = ColorButtonNode(
             color: AppColor.imageButtonBackground,
-            size: CGSize(width: 128, height: 128))
+            size: Style.bigButtonSize)
         self.startButton = button
         addChild(button)
         button.texture = SKTexture(imageNamed: "play-button")
-        button.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        button.position = buttonPosition(xGridOffset: 0, yGridOffset: 0)
         button.onTap = { [weak self] button in
             self?.onStartTapped()
         }
+    }
+
+    public func buttonPosition(xGridOffset: CGFloat, yGridOffset: CGFloat) -> CGPoint {
+        return CGPoint(x: self.size.width / 2 + (Style.bigButtonSize.width / 2 + 10) * xGridOffset,
+                       y: self.size.height / 2 + (Style.bigButtonSize.height / 2 + 10) * yGridOffset)
     }
 
     func addThemeButton() {
@@ -149,7 +154,7 @@ open class GameScene: SKScene {
         self.themeButton = button
         addChild(button)
         button.texture = SKTexture(imageNamed: "theme-button")
-        button.position = CGPoint(x: self.size.width / 2 + 96 + 10, y: self.size.height / 2 + 32 + 64 + 15)
+        button.position = buttonPosition(xGridOffset: 1.5, yGridOffset: 1.5)
         button.onTap = { [weak self] button in
             guard let sself = self else { return }
             sself.backgroundIndex =  (sself.backgroundIndex + 1) % AppColor.boardBackground.count
@@ -163,7 +168,7 @@ open class GameScene: SKScene {
         self.resetButton = button
         addChild(button)
         button.texture = SKTexture(imageNamed: "reset-button")
-        button.position = CGPoint(x: self.size.width / 2 + 96 + 10, y: self.size.height / 2)
+        button.position = buttonPosition(xGridOffset: 1.5, yGridOffset: 0)
         button.onTap = { [weak self] button in
             guard let sself = self else { return }
             sself.reset()
@@ -171,12 +176,11 @@ open class GameScene: SKScene {
     }
 
     func addPlayerButtons() {
-        var startPos = CGPoint(x: self.size.width / 2 + 64 + 10 + 32,
-                               y: self.size.height / 2  - 5 - 32)
         for (i, player) in ["1p", "2p"].enumerated() {
+            let pos = buttonPosition(xGridOffset: 1.5, yGridOffset: -CGFloat(i + 1) + 0.5)
             self.playerButtons.append(
-                addPlayerButton(name: player, position: startPos, on: numberOfPlayers == (i+1)))
-            startPos.y -= 64 + 10
+                addPlayerButton(name: player, position: pos, on: numberOfPlayers == (i+1)))
+
         }
     }
 
@@ -221,12 +225,12 @@ open class GameScene: SKScene {
 
         let button = ColorButtonNode(
             color: AppColor.imageButtonBackground,
-            size: CGSize(width: 128, height: 128))
+            size: Style.bigButtonSize)
         self.pauseButton = button
         addChild(button)
         button.texture = SKTexture(imageNamed: "pause-button")
         button.alpha = 0.4
-        button.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        button.position = buttonPosition(xGridOffset: 0, yGridOffset: 0)
         button.onTap = { [weak self] button in
             self?.onPauseTapped()
         }

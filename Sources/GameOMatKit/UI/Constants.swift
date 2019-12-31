@@ -12,6 +12,7 @@ import SpriteKit
 public enum Style {
     public static let fontName = "Courier"
     public static let scoreFontSize: CGFloat = 50
+    public static let bigButtonSize = CGSize(width: 128, height: 128)
     public static let smallButtonSize = CGSize(width: 64, height: 64)
     public static let sideInset: CGFloat = 5
 }
