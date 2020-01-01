@@ -15,7 +15,11 @@ public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
     var player: PongPlayer
     public let players: [Player]
     var guideLine: SKNode?
-    var guideOffset: CGFloat = 0
+    var guideOffset: CGFloat = 0 {
+        didSet {
+            self.guideLine?.run(SKAction.moveTo(y: guideOffset, duration: 0.25))
+        }
+    }
 
     public override init(generator: ProblemGenerator) {
         self.player = PongPlayer(problemRotation: 0, position: .bottom)
@@ -26,7 +30,7 @@ public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
     public override func reset() {
         super.reset()
         self.player.score = 0
-        self.guideLine?.run(SKAction.moveTo(y: 0, duration: 0.25))
+        self.guideOffset = 0
     }
 
     public override func getPlayers() -> GameLogicPlayers? {
@@ -102,9 +106,7 @@ public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
         self.problemNode?.physicsBody?.velocity =
             CGVector(dx: velocity.dx * 1.15, dy: velocity.dy * 1.25)
 
-        guideOffset = max(guideOffset - 15, -75)
-        self.guideLine?.run(SKAction.moveTo(y: guideOffset, duration: 0.25))
-
+        self.guideOffset = max(self.guideOffset - 15, -75)
         self.player.score = max(0, self.player.score - 1)
     }
 

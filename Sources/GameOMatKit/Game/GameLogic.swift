@@ -61,11 +61,11 @@ public class GameOptions {
     }
 
     func chosen() -> GameOption? {
-        return options.first(where: { $0.on } )
+        return options.first(where: { $0.on })
     }
 
     func chosenIndex() -> Int? {
-        return options.firstIndex(where: { $0.on } )
+        return options.firstIndex(where: { $0.on })
     }
 }
 
