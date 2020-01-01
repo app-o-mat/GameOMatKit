@@ -177,10 +177,19 @@ open class GameScene: SKScene {
     }
 
     func addOptionButtons() {
-        let options = gameLogics[numberOfPlayers - 1].options()
+        let playerIndex = numberOfPlayers - 1
+        let options = gameLogics[playerIndex].options()
+        let playerX = playerXGridOffset(playerIndex: playerIndex)
+        let playerY = playerYGridOffset(playerIndex: playerIndex)
+        let spacing: CGFloat = 0.6
+        let startXOffset: CGFloat =  -spacing * CGFloat(options.options.count - 1) / 2.0
+        let yOffset: CGFloat = -0.80
 
         for (i, option) in options.options.enumerated() {
-            let pos = buttonPosition(xGridOffset: -0.5 + CGFloat(i), yGridOffset: -2.5)
+            let xOffset = startXOffset + CGFloat(i) * spacing
+
+            let yGridOffset: CGFloat = -sqrt(pow(yOffset, 2) - pow(xOffset, 2))
+            let pos = buttonPosition(xGridOffset: playerX + xOffset, yGridOffset: playerY + yGridOffset)
             self.optionButtons.append(
                 addOptionButton(option: option, position: pos, on: option.on))
         }
@@ -212,9 +221,18 @@ open class GameScene: SKScene {
         addOptionButtons()
     }
 
+    func playerXGridOffset(playerIndex: Int) -> CGFloat {
+        return -1 + CGFloat(playerIndex) * 2
+    }
+
+    func playerYGridOffset(playerIndex: Int) -> CGFloat {
+        return -1.5
+    }
+
     func addPlayerButtons() {
         for (i, player) in ["1p", "2p"].enumerated() {
-            let pos = buttonPosition(xGridOffset: -0.5 + CGFloat(i), yGridOffset: -1.5)
+            let pos = buttonPosition(xGridOffset: playerXGridOffset(playerIndex: i),
+                                     yGridOffset: playerYGridOffset(playerIndex: i))
             self.playerButtons.append(
                 addPlayerButton(name: player, position: pos, on: numberOfPlayers == (i+1)))
         }
