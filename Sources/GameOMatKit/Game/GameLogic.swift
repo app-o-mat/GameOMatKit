@@ -59,6 +59,14 @@ public class GameOptions {
         options.forEach { $0.on = ($0 === option) }
         UserDefaults.standard.set(option.buttonImagePrefix, forKey: self.key)
     }
+
+    func chosen() -> GameOption? {
+        return options.first(where: { $0.on } )
+    }
+
+    func chosenIndex() -> Int? {
+        return options.firstIndex(where: { $0.on } )
+    }
 }
 
 public protocol GameLogic: SKPhysicsContactDelegate {

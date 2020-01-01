@@ -89,6 +89,10 @@ public class PongTwoPlayerLogic: PongGameLogic, GameLogicPlayers {
         currentPlayerMisses()
     }
 
+    func goalScore() -> Int {
+        return ((self.gameOptions.chosenIndex() ?? 0) + 1 ) * 7
+    }
+
     public func currentPlayerMisses() {
         guard let scene = self.scene else { return }
 
@@ -97,7 +101,7 @@ public class PongTwoPlayerLogic: PongGameLogic, GameLogicPlayers {
         let otherPlayer = 1 - currentPlayer
         self.getPongPlayers()[otherPlayer].score += 1
 
-        guard self.getPongPlayers()[otherPlayer].score < 7 else { return gameOver() }
+        guard self.getPongPlayers()[otherPlayer].score < goalScore() else { return gameOver() }
 
         self.problemNode?.physicsBody = nil
         self.problemNode?.position = initialPosition(scene: scene)
