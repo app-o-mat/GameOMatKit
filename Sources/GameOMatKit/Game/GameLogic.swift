@@ -26,6 +26,41 @@ public protocol GameLogicDelegate: class {
     func scene() -> GameScene
 }
 
+public class GameOption {
+    let buttonImagePrefix: String
+    var on: Bool = false
+
+    init(buttonImagePrefix: String) {
+        self.buttonImagePrefix = buttonImagePrefix
+    }
+}
+
+public class GameOptions {
+    let name: String
+    var options: [GameOption]
+
+    private lazy var key = { "\(SettingKey.prefix).\(self.name)" }()
+
+    init(name: String, options: [GameOption]) {
+        self.name = name
+        self.options = options
+        if let saved = UserDefaults.standard.string(forKey: self.key) {
+            if let chosenOption = options.first(where: { $0.buttonImagePrefix == saved }) {
+                chosenOption.on = true
+            } else {
+                options.first?.on = true
+            }
+        } else {
+            options.first?.on = true
+        }
+    }
+
+    func tap(option: GameOption) {
+        options.forEach { $0.on = ($0 === option) }
+        UserDefaults.standard.set(option.buttonImagePrefix, forKey: self.key)
+    }
+}
+
 public protocol GameLogic: SKPhysicsContactDelegate {
     var delegate: GameLogicDelegate? { get set }
     var generator: ProblemGenerator { get set }
@@ -36,4 +71,5 @@ public protocol GameLogic: SKPhysicsContactDelegate {
     func gameOver()
     func removeAllNodes()
     func getPlayers() -> GameLogicPlayers?
+    func options() -> GameOptions
 }

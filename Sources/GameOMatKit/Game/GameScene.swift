@@ -24,6 +24,7 @@ open class GameScene: SKScene {
     var resetButton: ColorButtonNode?
 
     var playerButtons = [ColorButtonNode]()
+    var optionButtons = [ColorButtonNode]()
 
     var numPausesLeft = 3
 
@@ -175,13 +176,49 @@ open class GameScene: SKScene {
         }
     }
 
+    func addOptionButtons() {
+        let options = gameLogics[numberOfPlayers - 1].options()
+
+        for (i, option) in options.options.enumerated() {
+            let pos = buttonPosition(xGridOffset: -0.5 + CGFloat(i), yGridOffset: -2.5)
+            self.optionButtons.append(
+                addOptionButton(option: option, position: pos, on: option.on))
+        }
+    }
+
+    func addOptionButton(option: GameOption, position: CGPoint, on: Bool) -> ColorButtonNode {
+        let button = ColorButtonNode(
+            color: AppColor.imageButtonBackground,
+            size: Style.miniButtonSize)
+        addChild(button)
+        button.texture = SKTexture(imageNamed: "\(option.buttonImagePrefix)-button-\(on ? "on" : "off")")
+        button.position = position
+        button.name = name
+        button.onTap = { [weak self, weak option] _ in
+            guard let sself = self, let option = option else { return }
+            sself.gameLogic.options().tap(option: option)
+            sself.resetOptionButtons()
+        }
+        return button
+    }
+
+    func removeOptionButtons() {
+        self.optionButtons.forEach { $0.removeFromParent() }
+        self.optionButtons = []
+    }
+
+    func resetOptionButtons() {
+        removeOptionButtons()
+        addOptionButtons()
+    }
+
     func addPlayerButtons() {
         for (i, player) in ["1p", "2p"].enumerated() {
             let pos = buttonPosition(xGridOffset: -0.5 + CGFloat(i), yGridOffset: -1.5)
             self.playerButtons.append(
                 addPlayerButton(name: player, position: pos, on: numberOfPlayers == (i+1)))
-
         }
+        addOptionButtons()
     }
 
     func addPlayerButton(name: String, position: CGPoint, on: Bool) -> ColorButtonNode {
@@ -207,6 +244,7 @@ open class GameScene: SKScene {
     func removePlayerButtons() {
         self.playerButtons.forEach { $0.removeFromParent() }
         self.playerButtons = []
+        removeOptionButtons()
     }
 
     open func onStartTapped() {

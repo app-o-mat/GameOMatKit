@@ -12,8 +12,10 @@ import SpriteKit
 public enum Style {
     public static let fontName = "Courier"
     public static let scoreFontSize: CGFloat = 50
-    public static let bigButtonSize = CGSize(width: 128, height: 128)
-    public static let smallButtonSize = CGSize(width: 64, height: 64)
+    public static let bigButtonSize = CGSize(width: 132, height: 132)
+    public static let smallButtonSize = CGSize(width: 66, height: 66)
+    public static let miniButtonSize = CGSize(width: 44, height: 44)
+
     public static let sideInset: CGFloat = 5
 }
 
@@ -24,8 +26,9 @@ public enum NodeName {
 }
 
 public enum SettingKey {
-    public static let backgroundIndex = "settingKey.backgroundIndex"
-    public static let numberOfPlayers = "settingKey.numberOfPlayers"
+    public static let prefix = "settingKey"
+    public static let backgroundIndex = "\(prefix).backgroundIndex"
+    public static let numberOfPlayers = "\(prefix).numberOfPlayers"
 }
 
 public enum GameState {

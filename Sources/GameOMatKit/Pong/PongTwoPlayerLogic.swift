@@ -1,5 +1,5 @@
 //
-//  PongTwoPlayer.swift
+//  PongTwoPlayerLogic.swift
 //  MathOMat
 //
 //  Created by Louis Franco on 12/19/19.
@@ -10,7 +10,14 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
+public class PongTwoPlayerLogic: PongGameLogic, GameLogicPlayers {
+
+    var gameOptions = GameOptions(name: "pong-2p-goal", options: [
+        GameOption(buttonImagePrefix: "pong-2p-7"),
+        GameOption(buttonImagePrefix: "pong-2p-14"),
+        GameOption(buttonImagePrefix: "pong-2p-21"),
+    ])
+
     public let players: [Player] = [
         PongPlayer(problemRotation: 0, position: .bottom),
         PongPlayer(problemRotation: .pi, position: .top)]
@@ -47,6 +54,10 @@ public class PongTwoPlayer: PongGameLogic, GameLogicPlayers {
         } else {
             label.position = CGPoint(x: 0, y: problemSize.height / 2.0)
         }
+    }
+
+    open override func options() -> GameOptions {
+        return gameOptions
     }
 
     override func addScoreNode(playerIndex: Int, yPosition: CGFloat) {

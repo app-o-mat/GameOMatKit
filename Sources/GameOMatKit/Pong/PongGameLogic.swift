@@ -72,6 +72,10 @@ public class PongGameLogic: NSObject, GameLogic {
         createProblem()
     }
 
+    open func options() -> GameOptions {
+        return GameOptions(name: "", options: [])
+    }
+
     func add(node: SKNode, to parent: SKNode) {
         parent.addChild(node)
         allNodes.append(node)

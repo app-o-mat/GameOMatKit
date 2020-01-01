@@ -46,7 +46,7 @@ public class ColorButtonNode: SKSpriteNode {
         }
     }
 
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.onTap?(self)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  PongOnePlayer.swift
+//  PongOnePlayerLogic.swift
 //  MathOMat
 //
 //  Created by Louis Franco on 12/20/19.
@@ -10,30 +10,30 @@ import Foundation
 import GameplayKit
 import SpriteKit
 
-public class PongOnePlayer: PongGameLogic, GameLogicPlayers {
+public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
 
     var player: PongPlayer
     public let players: [Player]
     var guideLine: SKNode?
     var guideOffset: CGFloat = 0
 
-    override public init(generator: ProblemGenerator) {
+    public override init(generator: ProblemGenerator) {
         self.player = PongPlayer(problemRotation: 0, position: .bottom)
         self.players = [player]
         super.init(generator: generator)
     }
 
-    override public func reset() {
+    public override func reset() {
         super.reset()
         self.player.score = 0
         self.guideLine?.run(SKAction.moveTo(y: 0, duration: 0.25))
     }
 
-    override public func getPlayers() -> GameLogicPlayers? {
+    public override func getPlayers() -> GameLogicPlayers? {
         return self
     }
 
-    override public func addBoardNodes() {
+    public override func addBoardNodes() {
         super.addBoardNodes()
         guard let scene = self.scene else { return }
 
