@@ -21,10 +21,10 @@ public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
         }
     }
 
-    public override init(generator: ProblemGenerator) {
+    public override init(generator: ProblemGenerator, numButtonLines: Int = 1) {
         self.player = PongPlayer(problemRotation: 0, position: .bottom)
         self.players = [player]
-        super.init(generator: generator)
+        super.init(generator: generator, numButtonLines: numButtonLines)
     }
 
     public override func reset() {

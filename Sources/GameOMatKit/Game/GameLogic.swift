@@ -72,6 +72,7 @@ public class GameOptions {
 public protocol GameLogic: SKPhysicsContactDelegate {
     var delegate: GameLogicDelegate? { get set }
     var generator: ProblemGenerator { get set }
+    var numButtonLines: Int { get }
 
     func reset()
     func addBoardNodes()

@@ -21,5 +21,6 @@ public struct Problem {
 }
 
 public protocol ProblemGenerator {
+    var maxAnswerLength: Int { get }
     func getNextProblem() -> Problem
 }

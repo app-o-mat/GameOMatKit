@@ -42,6 +42,7 @@ public enum MathOperator: String, CaseIterable {
 public class AdditionProblems: ProblemGenerator, MathProblemFromOperands {
     public let smallestOperand = 0
     public let biggestOperand = 10
+    public let maxAnswerLength = 3
 
     public func question(operand1: Int, operand2: Int) -> String {
         return "\(operand1) + \(operand2)"
@@ -81,6 +82,7 @@ public class AdditionProblems: ProblemGenerator, MathProblemFromOperands {
 public class MinusProblems: ProblemGenerator, MathProblemFromOperands {
     public let smallestOperand = 0
     public let biggestOperand = 10
+    public let maxAnswerLength = 3
 
     public func question(operand1: Int, operand2: Int) -> String {
         return "\(operand1 + operand2) - \(operand2)"
@@ -111,6 +113,7 @@ public class MinusProblems: ProblemGenerator, MathProblemFromOperands {
 public class MultiplicationProblems: ProblemGenerator, MathProblemFromOperands {
     public let smallestOperand = 2
     public let biggestOperand = 12
+    public let maxAnswerLength = 3
 
     public func question(operand1: Int, operand2: Int) -> String {
         return "\(operand1) × \(operand2)"
@@ -140,6 +143,7 @@ public class MultiplicationProblems: ProblemGenerator, MathProblemFromOperands {
 public class DivisionProblems: ProblemGenerator, MathProblemFromOperands {
     public let smallestOperand = 2
     public let biggestOperand = 12
+    public let maxAnswerLength = 3
 
     public func question(operand1: Int, operand2: Int) -> String {
         return "\(operand1 * operand2) ÷ \(operand2)"

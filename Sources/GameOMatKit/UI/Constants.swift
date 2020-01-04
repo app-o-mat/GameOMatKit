@@ -12,11 +12,16 @@ import SpriteKit
 public enum Style {
     public static let fontName = "Courier"
     public static let scoreFontSize: CGFloat = 50
+    public static let problemFontSize: CGFloat = 54
+    public static let buttonFontSize: CGFloat = 24
+    public static let buttonFont = UIFont(name: Style.fontName, size: Style.buttonFontSize)
     public static let bigButtonSize = CGSize(width: 132, height: 132)
     public static let smallButtonSize = CGSize(width: 66, height: 66)
     public static let miniButtonSize = CGSize(width: 44, height: 44)
 
     public static let sideInset: CGFloat = 5
+    public static let buttonHeight: CGFloat = 44
+    public static let buttonMargin: CGFloat = 5
 }
 
 public enum NodeName {

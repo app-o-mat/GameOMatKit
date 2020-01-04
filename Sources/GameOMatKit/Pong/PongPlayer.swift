@@ -14,12 +14,15 @@ public enum PlayerPosition {
     case bottom
     case top
 
-    func buttonYPosition(viewSize: CGSize, buttonHeight: CGFloat, lineOffset: CGFloat) -> CGFloat {
+    func buttonYPosition(viewSize: CGSize, buttonHeight: CGFloat,
+                         lineOffset: CGFloat, buttonLine: Int) -> CGFloat {
         switch self {
         case .bottom:
-            return lineOffset - 15.0 - buttonHeight / 2.0
+            return lineOffset - Style.buttonMargin - buttonHeight / 2.0 -
+                (CGFloat(buttonLine) * buttonHeight + Style.buttonMargin)
         case .top:
-            return viewSize.height - lineOffset + 15.0 + buttonHeight / 2.0
+            return viewSize.height - lineOffset + Style.buttonMargin + buttonHeight / 2.0 +
+                (CGFloat(buttonLine) * buttonHeight + Style.buttonMargin)
         }
     }
 }
@@ -44,38 +47,65 @@ public class PongPlayer: Player {
         self.scoreNode.text = "\(self.score)"
     }
 
-    public func addButton(scene: SKScene, xPos: CGFloat, text: String, lineOffset: CGFloat) -> ColorButtonNode {
-        let buttonWidth = lineOffset * 0.66
-        let buttonSize = CGSize(width: lineOffset * 0.66, height: buttonWidth * 0.70)
+    public func addButton(scene: SKScene, pos: CGPoint, text: String, lineOffset: CGFloat, buttonWidth: CGFloat)
+        -> ColorButtonNode {
+
+        let buttonSize = CGSize(width: buttonWidth, height: Style.buttonHeight)
         let button = ColorButtonNode(
             color: colors.nextColor(),
             size: buttonSize,
             flipped: position == .top)
-        button.position =
-            CGPoint(x: xPos,
-                    y: position.buttonYPosition(viewSize: scene.size,
-                                                buttonHeight: buttonSize.height,
-                                                lineOffset: lineOffset))
+        button.position = pos
         button.text = text
         scene.addChild(button)
         return button
     }
 
-    public func addButtons(scene: SKScene, problem: Problem, lineOffset: CGFloat) -> [ColorButtonNode] {
-        let buttonWidth: CGFloat = lineOffset * 0.66
-        let possiblePositions: [CGFloat] = [scene.size.width / 2.0,
-                                            scene.size.width / 2.0 - buttonWidth - 20,
-                                            scene.size.width / 2.0 + buttonWidth + 20 ]
-        let positions: [CGFloat] = GKRandomSource.sharedRandom()
-            .arrayByShufflingObjects(in: possiblePositions).map { ($0 as? CGFloat) ?? 0.0 }
+    func buttonPositions(scene: SKScene, lineOffset: CGFloat, buttonWidth: CGFloat, numButtonLines: Int) -> [CGPoint] {
+        let yPos = position.buttonYPosition(viewSize: scene.size,
+                                            buttonHeight: Style.buttonHeight,
+                                            lineOffset: lineOffset,
+                                            buttonLine: 0)
+
+        let possiblePositions: [CGPoint]
+        if numButtonLines == 1 {
+            possiblePositions = [
+                CGPoint(x: scene.size.width / 2.0, y: yPos),
+                CGPoint(x: scene.size.width / 2.0 - buttonWidth - 20, y: yPos),
+                CGPoint(x: scene.size.width / 2.0 + buttonWidth + 20, y: yPos),
+            ]
+        } else {
+            let yPos2 = position.buttonYPosition(viewSize: scene.size,
+                                                buttonHeight: Style.buttonHeight,
+                                                lineOffset: lineOffset,
+                                                buttonLine: 1)
+            possiblePositions = [
+                CGPoint(x: scene.size.width / 2.0, y: yPos),
+                CGPoint(x: scene.size.width / 2.0 - buttonWidth / 2 - Style.buttonMargin, y: yPos2),
+                CGPoint(x: scene.size.width / 2.0 + buttonWidth / 2 + Style.buttonMargin, y: yPos2),
+            ]
+        }
+        return GKRandomSource.sharedRandom()
+            .arrayByShufflingObjects(in: possiblePositions).compactMap { $0 as? CGPoint }
+    }
+
+    public func addButtons(scene: SKScene, problem: Problem,
+                           lineOffset: CGFloat, buttonWidth: CGFloat,
+                           numButtonLines: Int) -> [ColorButtonNode] {
+
+        let positions = buttonPositions(scene: scene, lineOffset: lineOffset,
+                                        buttonWidth: buttonWidth, numButtonLines: numButtonLines)
         let wrongAnswers = GKRandomSource.sharedRandom()
             .arrayByShufflingObjects(in: [String](problem.wrongAnswers))
-            .map { ($0 as? String) ?? "" }
+            .compactMap { $0 as? String }
 
         self.buttons = [
-            addButton(scene: scene, xPos: positions[0], text: problem.answer, lineOffset: lineOffset),
-            addButton(scene: scene, xPos: positions[1], text: wrongAnswers[0], lineOffset: lineOffset),
-            addButton(scene: scene, xPos: positions[2], text: wrongAnswers[1], lineOffset: lineOffset),
+            addButton(scene: scene, pos: positions[0], text: problem.answer,
+                      lineOffset: lineOffset, buttonWidth: buttonWidth),
+            addButton(scene: scene, pos: positions[1], text: wrongAnswers[0],
+                      lineOffset: lineOffset, buttonWidth: buttonWidth),
+            addButton(scene: scene, pos: positions[2], text: wrongAnswers[1],
+                      lineOffset: lineOffset, buttonWidth: buttonWidth),
         ]
         return self.buttons
     }

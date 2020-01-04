@@ -9,9 +9,12 @@
 import Foundation
 import SpriteKit
 import GameplayKit
+import UIKit
 
 public class PongGameLogic: NSObject, GameLogic {
     var allNodes = [SKNode]()
+
+    public private(set) var numButtonLines: Int = 1
 
     public weak var delegate: GameLogicDelegate?
 
@@ -29,6 +32,12 @@ public class PongGameLogic: NSObject, GameLogic {
     }
 
     var currentPlayer = 0
+    var answerButtonWidth: CGFloat {
+        guard let font = Style.buttonFont else { return 0 }
+
+        return NSString(" ").size(withAttributes: [NSAttributedString.Key.font: font]).width *
+            CGFloat(generator.maxAnswerLength) + 10.0
+    }
 
     let winSoundAction = SKAction.playSoundFileNamed("win", waitForCompletion: false)
     let loseSoundAction = SKAction.playSoundFileNamed("lose", waitForCompletion: false)
@@ -37,8 +46,9 @@ public class PongGameLogic: NSObject, GameLogic {
         return self.delegate?.scene()
     }
 
-    public init(generator: ProblemGenerator) {
+    public init(generator: ProblemGenerator, numButtonLines: Int = 1) {
         self.generator = generator
+        self.numButtonLines = numButtonLines
         self.currentProblem = generator.getNextProblem()
         super.init()
     }
@@ -101,7 +111,7 @@ public class PongGameLogic: NSObject, GameLogic {
     func createProblem() {
         guard let scene = self.scene else { return }
         let label = SKLabelNode(text: self.currentProblem.question)
-        label.fontSize = scene.size.height / 20
+        label.fontSize = Style.problemFontSize
         label.fontName = Style.fontName
 
         let problemSize = label.frame.size
@@ -223,7 +233,8 @@ public class PongGameLogic: NSObject, GameLogic {
 
         removeButtons()
         let buttons = getPongPlayers()[currentPlayer]
-            .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset())
+            .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset(),
+                        buttonWidth: self.answerButtonWidth, numButtonLines: self.numButtonLines)
 
         buttons.first?.onTap = { [weak self] button in
             guard self?.delegate?.gameState == .running else { return }
@@ -240,11 +251,8 @@ public class PongGameLogic: NSObject, GameLogic {
 
     func lineOffset() -> CGFloat {
         guard let scene = self.scene, let view = scene.view else { return 0.0 }
-
-        let size = view.frame.size
         let maxInset = max(view.safeAreaInsets.top, view.safeAreaInsets.bottom)
-
-        return size.height / 10 + maxInset
+        return CGFloat(self.numButtonLines) * (Style.buttonHeight + Style.buttonMargin) + maxInset
     }
 
     func node(named name: String, contact: SKPhysicsContact) -> SKNode? {

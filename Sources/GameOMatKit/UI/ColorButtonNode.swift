@@ -28,8 +28,8 @@ public class ColorButtonNode: SKSpriteNode {
         super.init(texture: nil, color: color, size: size)
         self.isUserInteractionEnabled = true
         addChild(labelNode)
-        labelNode.fontSize = size.height * 0.8
-        labelNode.fontName = "Courier"
+        labelNode.fontSize = Style.buttonFontSize
+        labelNode.fontName = Style.fontName
         if flipped {
             labelNode.zRotation = .pi
         }
