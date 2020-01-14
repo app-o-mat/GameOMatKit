@@ -14,7 +14,7 @@ import UIKit
 public class PongGameLogic: NSObject, GameLogic {
     var allNodes = [SKNode]()
 
-    public private(set) var numButtonLines: Int = 1
+    public let style: PongStyle
 
     public weak var delegate: GameLogicDelegate?
 
@@ -46,9 +46,9 @@ public class PongGameLogic: NSObject, GameLogic {
         return self.delegate?.scene()
     }
 
-    public init(generator: ProblemGenerator, numButtonLines: Int = 1) {
+    public init(generator: ProblemGenerator, style: PongStyle = PongStyle()) {
         self.generator = generator
-        self.numButtonLines = numButtonLines
+        self.style = style
         self.currentProblem = generator.getNextProblem()
         super.init()
     }
@@ -111,7 +111,7 @@ public class PongGameLogic: NSObject, GameLogic {
     func createProblem() {
         guard let scene = self.scene else { return }
         let label = SKLabelNode(text: self.currentProblem.question)
-        label.fontSize = Style.problemFontSize
+        label.fontSize = self.style.problemFontSize
         label.fontName = Style.fontName
 
         let problemSize = label.frame.size
@@ -234,7 +234,7 @@ public class PongGameLogic: NSObject, GameLogic {
         removeButtons()
         let buttons = getPongPlayers()[currentPlayer]
             .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset(),
-                        buttonWidth: self.answerButtonWidth, numButtonLines: self.numButtonLines)
+                        buttonWidth: self.answerButtonWidth, numButtonLines: self.style.numButtonLines)
 
         buttons.first?.onTap = { [weak self] button in
             guard self?.delegate?.gameState == .running else { return }
@@ -252,7 +252,7 @@ public class PongGameLogic: NSObject, GameLogic {
     func lineOffset() -> CGFloat {
         guard let scene = self.scene, let view = scene.view else { return 0.0 }
         let maxInset = max(view.safeAreaInsets.top, view.safeAreaInsets.bottom)
-        return CGFloat(self.numButtonLines) * (Style.buttonHeight + Style.buttonMargin) + maxInset
+        return CGFloat(self.style.numButtonLines) * (Style.buttonHeight + Style.buttonMargin) + maxInset
     }
 
     func node(named name: String, contact: SKPhysicsContact) -> SKNode? {
