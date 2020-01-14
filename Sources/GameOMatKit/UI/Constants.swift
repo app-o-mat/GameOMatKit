@@ -21,7 +21,7 @@ public enum Style {
 
     public static let sideInset: CGFloat = 5
     public static let buttonHeight: CGFloat = 44
-    public static let buttonMargin: CGFloat = 5
+    public static let buttonMargin: CGFloat = 10
 }
 
 public enum NodeName {

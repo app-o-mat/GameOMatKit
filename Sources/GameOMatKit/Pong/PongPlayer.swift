@@ -19,10 +19,10 @@ public enum PlayerPosition {
         switch self {
         case .bottom:
             return lineOffset - Style.buttonMargin - buttonHeight / 2.0 -
-                (CGFloat(buttonLine) * buttonHeight + Style.buttonMargin)
+                (CGFloat(buttonLine) * (buttonHeight + Style.buttonMargin))
         case .top:
             return viewSize.height - lineOffset + Style.buttonMargin + buttonHeight / 2.0 +
-                (CGFloat(buttonLine) * buttonHeight + Style.buttonMargin)
+                (CGFloat(buttonLine) * (buttonHeight + Style.buttonMargin))
         }
     }
 }
@@ -83,8 +83,8 @@ public class PongPlayer: Player {
                                                 buttonLine: 1)
             possiblePositions = [
                 CGPoint(x: scene.size.width / 2.0, y: yPos),
-                CGPoint(x: scene.size.width / 2.0 - buttonWidth / 2 - Style.buttonMargin, y: yPos2),
-                CGPoint(x: scene.size.width / 2.0 + buttonWidth / 2 + Style.buttonMargin, y: yPos2),
+                CGPoint(x: scene.size.width / 2.0 - buttonWidth / 2 - Style.buttonMargin / 2, y: yPos2),
+                CGPoint(x: scene.size.width / 2.0 + buttonWidth / 2 + Style.buttonMargin / 2, y: yPos2),
             ]
         }
         return GKRandomSource.sharedRandom()
