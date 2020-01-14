@@ -33,7 +33,7 @@ public class PongGameLogic: NSObject, GameLogic {
 
     var currentPlayer = 0
     var answerButtonWidth: CGFloat {
-        guard let font = Style.buttonFont else { return 0 }
+        guard let font = UIFont(name: Style.fontName, size: self.style.buttonFontSize) else { return 0 }
 
         return NSString(" ").size(withAttributes: [NSAttributedString.Key.font: font]).width *
             CGFloat(generator.maxAnswerLength) + 10.0
@@ -234,7 +234,7 @@ public class PongGameLogic: NSObject, GameLogic {
         removeButtons()
         let buttons = getPongPlayers()[currentPlayer]
             .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset(),
-                        buttonWidth: self.answerButtonWidth, numButtonLines: self.style.numButtonLines)
+                        buttonWidth: self.answerButtonWidth, style: self.style)
 
         buttons.first?.onTap = { [weak self] button in
             guard self?.delegate?.gameState == .running else { return }

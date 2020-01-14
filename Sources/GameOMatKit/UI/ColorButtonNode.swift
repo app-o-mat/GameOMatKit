@@ -23,12 +23,12 @@ public class ColorButtonNode: SKSpriteNode {
 
     }
 
-    public init(color: UIColor, size: CGSize, flipped: Bool = false) {
+    public init(color: UIColor, size: CGSize, flipped: Bool = false, fontSize: CGFloat = Style.buttonFontSize) {
         self.flipped = flipped
         super.init(texture: nil, color: color, size: size)
         self.isUserInteractionEnabled = true
         addChild(labelNode)
-        labelNode.fontSize = Style.buttonFontSize
+        labelNode.fontSize = fontSize
         labelNode.fontName = Style.fontName
         if flipped {
             labelNode.zRotation = .pi

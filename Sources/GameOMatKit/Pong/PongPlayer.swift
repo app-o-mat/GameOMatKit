@@ -47,14 +47,16 @@ public class PongPlayer: Player {
         self.scoreNode.text = "\(self.score)"
     }
 
-    public func addButton(scene: SKScene, pos: CGPoint, text: String, lineOffset: CGFloat, buttonWidth: CGFloat)
+    public func addButton(scene: SKScene, pos: CGPoint, text: String,
+                          buttonWidth: CGFloat, fontSize: CGFloat)
         -> ColorButtonNode {
 
         let buttonSize = CGSize(width: buttonWidth, height: Style.buttonHeight)
         let button = ColorButtonNode(
             color: colors.nextColor(),
             size: buttonSize,
-            flipped: position == .top)
+            flipped: position == .top,
+            fontSize: fontSize)
         button.position = pos
         button.text = text
         scene.addChild(button)
@@ -91,21 +93,21 @@ public class PongPlayer: Player {
 
     public func addButtons(scene: SKScene, problem: Problem,
                            lineOffset: CGFloat, buttonWidth: CGFloat,
-                           numButtonLines: Int) -> [ColorButtonNode] {
+                           style: PongStyle) -> [ColorButtonNode] {
 
         let positions = buttonPositions(scene: scene, lineOffset: lineOffset,
-                                        buttonWidth: buttonWidth, numButtonLines: numButtonLines)
+                                        buttonWidth: buttonWidth, numButtonLines: style.numButtonLines)
         let wrongAnswers = GKRandomSource.sharedRandom()
             .arrayByShufflingObjects(in: [String](problem.wrongAnswers))
             .compactMap { $0 as? String }
 
         self.buttons = [
             addButton(scene: scene, pos: positions[0], text: problem.answer,
-                      lineOffset: lineOffset, buttonWidth: buttonWidth),
+                      buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
             addButton(scene: scene, pos: positions[1], text: wrongAnswers[0],
-                      lineOffset: lineOffset, buttonWidth: buttonWidth),
+                      buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
             addButton(scene: scene, pos: positions[2], text: wrongAnswers[1],
-                      lineOffset: lineOffset, buttonWidth: buttonWidth),
+                      buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
         ]
         return self.buttons
     }
