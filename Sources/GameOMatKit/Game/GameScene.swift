@@ -28,6 +28,8 @@ open class GameScene: SKScene {
 
     var numPausesLeft = 3
 
+    let tapRecognizer = UILongPressGestureRecognizer()
+
     var backgroundIndex = 0 {
         didSet {
             UserDefaults.standard.set(backgroundIndex, forKey: SettingKey.backgroundIndex)
@@ -59,6 +61,8 @@ open class GameScene: SKScene {
         self.backgroundColor = AppColor.boardBackground[backgroundIndex]
 
         subscribeToAppEvents()
+        tapRecognizer.addTarget(self, action: #selector(onTap(tap:)))
+        tapRecognizer.minimumPressDuration = 0
     }
 
     @available(*, unavailable)
@@ -102,9 +106,25 @@ open class GameScene: SKScene {
         }
     }
 
-    open func startGame() {
+    // Tap recognizer
+    @objc private func onTap(tap: UIGestureRecognizer) {
+        guard let view = self.view else { return }
+        if tap.state == .began {
+            var point = tap.location(in: view)
+            point.y = view.bounds.height - point.y
+            for node in self.nodes(at: point) {
+                if let button = node as? ColorButtonNode {
+                    button.onTap?(button)
+                }
+            }
+        }
+    }
+
+    // Game lifecycle
+    open func startGame(view: UIView) {
         createGameBoard()
         addWaitingToStartButtons()
+        view.addGestureRecognizer(self.tapRecognizer)
     }
 
     open func addWaitingToStartButtons() {

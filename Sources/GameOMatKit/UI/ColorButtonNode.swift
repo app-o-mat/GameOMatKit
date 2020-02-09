@@ -45,8 +45,4 @@ public class ColorButtonNode: SKSpriteNode {
             labelNode.position = CGPoint(x: 0, y: -(labelNode.frame.size.height) / 2.0)
         }
     }
-
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.onTap?(self)
-    }
 }
