@@ -20,6 +20,8 @@ public enum Style {
     public static let miniButtonSize = CGSize(width: 44, height: 44)
 
     public static let sideInset: CGFloat = 5
+    public static let boundaryLineWidth: CGFloat = 5
+    public static let guideLineWidth: CGFloat = 2
     public static let buttonHeight: CGFloat = 44
     public static let buttonMargin: CGFloat = 10
 }

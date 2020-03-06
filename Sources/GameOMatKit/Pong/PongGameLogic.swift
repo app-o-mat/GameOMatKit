@@ -98,7 +98,7 @@ public class PongGameLogic: NSObject, GameLogic {
         path.move(to: CGPoint(x: xPosition, y: 0))
         path.addLine(to: CGPoint(x: xPosition, y: scene.size.height))
         let boundary = SKShapeNode(path: path)
-        boundary.lineWidth = 2
+        boundary.lineWidth = Style.boundaryLineWidth
         boundary.strokeColor = AppColor.boundaryColor
 
         boundary.physicsBody = SKPhysicsBody(edgeChainFrom: path)
@@ -192,7 +192,7 @@ public class PongGameLogic: NSObject, GameLogic {
         path.move(to: CGPoint(x: Style.sideInset, y: yPosition))
         path.addLine(to: CGPoint(x: scene.size.width - Style.sideInset, y: yPosition))
         let boundary = SKShapeNode(path: path)
-        boundary.lineWidth = 5
+        boundary.lineWidth = Style.boundaryLineWidth
         boundary.strokeColor = AppColor.boundaryColor
         boundary.name = NodeName.playerLineName[playerIndex]
 
@@ -212,7 +212,7 @@ public class PongGameLogic: NSObject, GameLogic {
         path.addLine(to: CGPoint(x: scene.size.width - Style.sideInset, y: yPosition))
 
         let guide = SKShapeNode(path: path)
-        guide.lineWidth = 1
+        guide.lineWidth = Style.guideLineWidth
         guide.strokeColor = AppColor.guideColor
         guide.name = NodeName.buttonLineName[playerIndex]
 
