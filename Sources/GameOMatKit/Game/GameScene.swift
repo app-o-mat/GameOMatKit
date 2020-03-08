@@ -161,6 +161,7 @@ open class GameScene: SKScene {
             size: Style.bigButtonSize)
         self.startButton = button
         addChild(button)
+        button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "play-button")
         button.position = buttonPosition(xGridOffset: 0, yGridOffset: 2)
         button.onTap = { [weak self] button in
@@ -174,6 +175,7 @@ open class GameScene: SKScene {
             size: Style.smallButtonSize)
         self.themeButton = button
         addChild(button)
+        button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "theme-button")
         button.position = buttonPosition(xGridOffset: 0, yGridOffset: -3.5)
         button.onTap = { [weak self] button in
@@ -188,6 +190,7 @@ open class GameScene: SKScene {
             size: Style.smallButtonSize)
         self.resetButton = button
         addChild(button)
+        button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "reset-button")
         button.position = buttonPosition(xGridOffset: 1.5, yGridOffset: 2)
         button.onTap = { [weak self] button in
@@ -220,6 +223,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.miniButtonSize)
         addChild(button)
+        button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "\(option.buttonImagePrefix)-button-\(on ? "on" : "off")")
         button.position = position
         button.name = name
@@ -264,6 +268,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.smallButtonSize)
         addChild(button)
+        button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "\(name)-button-\(on ? "on" : "off")")
         button.position = position
         button.name = name
