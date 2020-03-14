@@ -105,7 +105,7 @@ public class PongGameLogic: NSObject, GameLogic {
         boundary.setupAsBoundary()
         boundary.setupAsObject()
 
-        add(node: boundary, to: scene)
+        add(node: boundary, to: scene.gameNodeRoot)
     }
 
     func createProblem() {
@@ -117,7 +117,7 @@ public class PongGameLogic: NSObject, GameLogic {
         let problemSize = label.frame.size
         let problemNode = SKSpriteNode(color: AppColor.problemBackground, size: problemSize)
         self.problemNode = problemNode
-        add(node: problemNode, to: scene)
+        add(node: problemNode, to: scene.gameNodeRoot)
 
         problemNode.name = NodeName.problemName
         problemNode.position = initialPosition(scene: scene)
@@ -200,7 +200,7 @@ public class PongGameLogic: NSObject, GameLogic {
         boundary.setupAsBoundary()
         boundary.setupAsGuide()
 
-        add(node: boundary, to: scene)
+        add(node: boundary, to: scene.gameNodeRoot)
 
         addScoreNode(playerIndex: playerIndex, yPosition: yPosition)
     }
@@ -220,7 +220,7 @@ public class PongGameLogic: NSObject, GameLogic {
         guide.setupAsBoundary()
         guide.setupAsGuide()
 
-        add(node: guide, to: scene)
+        add(node: guide, to: scene.gameNodeRoot)
         return guide
     }
 
@@ -233,7 +233,7 @@ public class PongGameLogic: NSObject, GameLogic {
 
         removeButtons()
         let buttons = getPongPlayers()[currentPlayer]
-            .addButtons(scene: scene, problem: currentProblem, lineOffset: lineOffset(),
+            .addButtons(scene: scene, rootNode: scene.gameNodeRoot, problem: currentProblem, lineOffset: lineOffset(),
                         buttonWidth: self.answerButtonWidth, style: self.style)
 
         buttons.first?.onTap = { [weak self] button in

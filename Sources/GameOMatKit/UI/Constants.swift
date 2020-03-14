@@ -24,7 +24,9 @@ public enum Style {
     public static let guideLineWidth: CGFloat = 2
     public static let buttonHeight: CGFloat = 44
     public static let buttonMargin: CGFloat = 10
-    public static let buttonZPosition: CGFloat = 1
+    public static let buttonZPosition: CGFloat = 5
+
+    public static let blurZPosition: CGFloat = 2
 }
 
 public enum NodeName {

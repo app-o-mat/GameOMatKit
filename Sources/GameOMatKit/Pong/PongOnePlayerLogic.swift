@@ -57,7 +57,7 @@ public class PongOnePlayerLogic: PongGameLogic, GameLogicPlayers {
         score.fontSize = Style.scoreFontSize
         score.position = CGPoint(x: scene.size.width / 2,
                                  y: scene.size.height - view.safeAreaInsets.top - score.frame.size.height - 10)
-        add(node: score, to: scene)
+        add(node: score, to: scene.gameNodeRoot)
     }
 
     override func initialPosition(scene: SKScene) -> CGPoint {

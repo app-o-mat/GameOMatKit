@@ -70,7 +70,7 @@ public class PongTwoPlayerLogic: PongGameLogic, GameLogicPlayers {
         score.fontSize = Style.scoreFontSize
         score.position = CGPoint(x: score.fontSize + 5, y: yPosition - 50 * CGFloat(playerIndex * 2 - 1))
         score.zRotation = .pi / 2.0
-        add(node: score, to: scene)
+        add(node: score, to: scene.gameNodeRoot)
     }
 
     public func currentPlayerHits() {

@@ -47,7 +47,7 @@ public class PongPlayer: Player {
         self.scoreNode.text = "\(self.score)"
     }
 
-    public func addButton(scene: SKScene, pos: CGPoint, text: String,
+    public func addButton(node: SKNode, pos: CGPoint, text: String,
                           buttonWidth: CGFloat, fontSize: CGFloat)
         -> ColorButtonNode {
 
@@ -59,7 +59,7 @@ public class PongPlayer: Player {
             fontSize: fontSize)
         button.position = pos
         button.text = text
-        scene.addChild(button)
+        node.addChild(button)
         return button
     }
 
@@ -91,7 +91,8 @@ public class PongPlayer: Player {
             .arrayByShufflingObjects(in: possiblePositions).compactMap { $0 as? CGPoint }
     }
 
-    public func addButtons(scene: SKScene, problem: Problem,
+    //swiftlint:disable function_parameter_count
+    public func addButtons(scene: SKScene, rootNode: SKNode, problem: Problem,
                            lineOffset: CGFloat, buttonWidth: CGFloat,
                            style: PongStyle) -> [ColorButtonNode] {
 
@@ -102,11 +103,11 @@ public class PongPlayer: Player {
             .compactMap { $0 as? String }
 
         self.buttons = [
-            addButton(scene: scene, pos: positions[0], text: problem.answer,
+            addButton(node: rootNode, pos: positions[0], text: problem.answer,
                       buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
-            addButton(scene: scene, pos: positions[1], text: wrongAnswers[0],
+            addButton(node: rootNode, pos: positions[1], text: wrongAnswers[0],
                       buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
-            addButton(scene: scene, pos: positions[2], text: wrongAnswers[1],
+            addButton(node: rootNode, pos: positions[2], text: wrongAnswers[1],
                       buttonWidth: buttonWidth, fontSize: style.buttonFontSize),
         ]
         return self.buttons

@@ -18,6 +18,9 @@ open class GameScene: SKScene {
     }
     let gameLogics: [GameLogic]
 
+    public let gameNodeRoot = SKEffectNode()
+    public private(set) var buttonNodeRoot: SKNode?
+
     var startButton: ColorButtonNode?
     var pauseButton: ColorButtonNode?
     var themeButton: ColorButtonNode?
@@ -59,6 +62,14 @@ open class GameScene: SKScene {
 
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.backgroundColor = AppColor.boardBackground[backgroundIndex]
+
+        self.gameNodeRoot.filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 5])
+        self.gameNodeRoot.shouldEnableEffects = true
+        self.addChild(self.gameNodeRoot)
+
+        let buttonNodeRoot = SKNode()
+        self.buttonNodeRoot = buttonNodeRoot
+        self.addChild(buttonNodeRoot)
 
         subscribeToAppEvents()
         tapRecognizer.addTarget(self, action: #selector(onTap(tap:)))
@@ -160,7 +171,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.bigButtonSize)
         self.startButton = button
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "play-button")
         button.position = buttonPosition(xGridOffset: 0, yGridOffset: 2)
@@ -174,7 +185,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.smallButtonSize)
         self.themeButton = button
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "theme-button")
         button.position = buttonPosition(xGridOffset: 0, yGridOffset: -3.5)
@@ -189,7 +200,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.smallButtonSize)
         self.resetButton = button
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "reset-button")
         button.position = buttonPosition(xGridOffset: 1.5, yGridOffset: 2)
@@ -222,7 +233,7 @@ open class GameScene: SKScene {
         let button = ColorButtonNode(
             color: AppColor.imageButtonBackground,
             size: Style.miniButtonSize)
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "\(option.buttonImagePrefix)-button-\(on ? "on" : "off")")
         button.position = position
@@ -267,7 +278,7 @@ open class GameScene: SKScene {
         let button = ColorButtonNode(
             color: AppColor.imageButtonBackground,
             size: Style.smallButtonSize)
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.zPosition = Style.buttonZPosition
         button.texture = SKTexture(imageNamed: "\(name)-button-\(on ? "on" : "off")")
         button.position = position
@@ -308,7 +319,7 @@ open class GameScene: SKScene {
             color: AppColor.imageButtonBackground,
             size: Style.bigButtonSize)
         self.pauseButton = button
-        addChild(button)
+        self.buttonNodeRoot?.addChild(button)
         button.texture = SKTexture(imageNamed: "pause-button")
         button.alpha = 0.4
         button.position = buttonPosition(xGridOffset: 0, yGridOffset: 2)
@@ -339,6 +350,7 @@ open class GameScene: SKScene {
         gameLogic.reset()
         gameLogic.run()
         self.gameState = .running
+        self.gameNodeRoot.shouldEnableEffects = false
     }
 
     open func reset() {
@@ -349,11 +361,13 @@ open class GameScene: SKScene {
     func pauseGame() {
         self.gameState = .paused
         self.isPaused = true
+        self.gameNodeRoot.shouldEnableEffects = true
     }
 
     func unPauseGame() {
         self.gameState = .running
         self.isPaused = false
+        self.gameNodeRoot.shouldEnableEffects = false
     }
 
 }
@@ -362,6 +376,7 @@ extension GameScene: GameLogicDelegate {
     open func didGameOver() {
         addWaitingToStartButtons()
         self.gameState = .waitingToStart
+        self.gameNodeRoot.shouldEnableEffects = true
     }
 
     open func scene() -> GameScene {
